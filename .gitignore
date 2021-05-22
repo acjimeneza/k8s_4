@@ -1,0 +1,12 @@
+
+# Files from compile process
+**/out/**
+**/bin/**
+**/obj/**
+./node_modules/**
+
+# Visual Studio code files
+.vscode
+
+.DS_Store
+

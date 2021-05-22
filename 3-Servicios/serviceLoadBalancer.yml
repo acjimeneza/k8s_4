@@ -1,0 +1,16 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: base-service
+  labels:
+    app: ms-base
+spec:
+  type: LoadBalancer
+  selector:
+    app: ms-base
+  ports:
+    - protocol: TCP
+      name: http
+      port: 8000
+      targetPort: 5000
