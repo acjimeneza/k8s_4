@@ -16,10 +16,13 @@ namespace ms_base.Controllers
 
         private readonly ILogger<TimeController> _logger;
 
-        public TimeController(ILogger<TimeController> logger, IConfiguration configuration)
+        private readonly IDataBase _dataBase;
+
+        public TimeController(ILogger<TimeController> logger, IConfiguration configuration, IDataBase dataBase)
         {
             _logger = logger;
             _configuration = configuration;
+            _dataBase = dataBase;
         }
 
         [HttpGet]
@@ -33,6 +36,24 @@ namespace ms_base.Controllers
             });
             return Ok(result);
         }
+        
+        [HttpGet]
+        [Route("all")]
+        public async Task<IActionResult> GetAll()
+        {
+            var result = await _dataBase.GetAllAsync();
+            return Ok(result);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Add(TimeDto time)
+        {
+            var result = await _dataBase.AddTimeAsync(time);
+            return Ok(result);
+        }
+
+
+
 
     }
 }

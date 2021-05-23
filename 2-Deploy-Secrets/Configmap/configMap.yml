@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: simple-configmap
+data:
+  # Parámetros en forma LLAVE: VALOR
+  llave1: hola mundo
+
+  # Manejo de ficheros
+  appsettings.Development.json: |
+    {
+    "AppName2": "ms-base-configmap"
+    }

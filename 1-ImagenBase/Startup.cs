@@ -28,6 +28,7 @@ namespace ms_base
         {
 
             services.AddControllers();
+            services.AddSingleton<IDataBase,DataBase>();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "ms_base", Version = "v1" });

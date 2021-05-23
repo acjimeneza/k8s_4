@@ -1,0 +1,71 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ms-base-deploy
+  labels:
+    app: ms-base
+spec:
+  selector:
+    matchLabels:
+      app: ms-base
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app: ms-base
+    spec:
+      containers:
+        - name: ms-base
+          image: acjimeneza/ms-base:1
+          env:
+          - name: USER_NAME
+            valueFrom:
+              configMapKeyRef:
+                key: llave1
+                name: simple-configmap
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 5000
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "50m"
+            limits:
+              memory: "128Mi"
+              cpu: "100m"
+          volumeMounts:
+            - name: configuration-from-cm
+              mountPath: app/Configuration/appsettings.Development.json
+              subPath: appsettings.Development.json
+      volumes:
+        - name: configuration-from-cm
+          configMap:
+            name: simple-configmap
+            items:
+              - key: "appsettings.Development.json"
+                path: "appsettings.Development.json"
+
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: base-service
+  labels:
+    app: ms-base
+spec:
+  type: LoadBalancer
+  selector:
+    app: ms-base
+  ports:
+    - protocol: TCP
+      name: http
+      port: 8000
+      targetPort: 5000
