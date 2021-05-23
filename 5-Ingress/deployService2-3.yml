@@ -1,0 +1,111 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ms-base-deploy-2
+  labels:
+    app: ms-base-2
+spec:
+  selector:
+    matchLabels:
+      app: ms-base-2
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app: ms-base-2
+    spec:
+      containers:
+        - name: ms-base-2
+          image: hashicorp/http-echo
+          imagePullPolicy: Always
+          args:
+            - "-text=greetings from ms-base-2"
+          ports:
+            - containerPort: 5678
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "50m"
+            limits:
+              memory: "128Mi"
+              cpu: "100m"
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: base-service-2
+  labels:
+    app: ms-base-2
+spec:
+  type: ClusterIP
+  selector:
+    app: ms-base-2
+  ports:
+    - protocol: TCP
+      name: http
+      port: 5678
+      targetPort: 5678
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ms-base-deploy-3
+  labels:
+    app: ms-base-3
+spec:
+  selector:
+    matchLabels:
+      app: ms-base-3
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app: ms-base-3
+    spec:
+      containers:
+        - name: ms-base-3
+          image: hashicorp/http-echo
+          imagePullPolicy: Always
+          args:
+            - "-text=greetings from ms-base-3"
+          ports:
+            - containerPort: 5678
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "50m"
+            limits:
+              memory: "128Mi"
+              cpu: "100m"
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: base-service-3
+  labels:
+    app: ms-base-3
+spec:
+  type: ClusterIP
+  selector:
+    app: ms-base-3
+  ports:
+    - protocol: TCP
+      name: http
+      port: 5678
+      targetPort: 5678
